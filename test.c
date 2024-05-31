@@ -1,25 +1,25 @@
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <fcntl.h>
+
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 10
 #endif
 
 size_t ft_strlen(char *s)
 {
     size_t  i = 0;
-
     if (!s)
         return 0;
-    while (s[i])
+    while(s[i])
         i++;
     return i;
 }
 
 char *ft_strchr(char *s, char c)
 {
-    if (!s)
+    if (!s) 
         return NULL;
     while (*s)
     {
@@ -31,15 +31,14 @@ char *ft_strchr(char *s, char c)
         return s;
     return NULL;
 }
-
 char *ft_strdup(char *s)
 {
+    char *rs;
     size_t i = 0;
-    char *rs = NULL;
 
     if (!s)
         return NULL;
-    rs = malloc(sizeof(char) * (ft_strlen(s) + 1));
+    rs = malloc(sizeof(char)  * (ft_strlen(s) + 1));
     if (!rs)
         return NULL;
     while (s[i])
@@ -47,18 +46,18 @@ char *ft_strdup(char *s)
         rs[i] = s[i];
         i++;
     }
-    rs[i] = '\0';
+    rs[i] ='\0';
     return rs;
 }
 
 char *ft_strjoin(char *s1, char *s2)
 {
+    char *rs;
     size_t i = 0;
     size_t j = 0;
-    char *rs = NULL;
 
-   if (!s2)
-    return NULL;
+    if (!s2)
+        return NULL;
     if (!s1)
         return (ft_strdup(s2));
     rs = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
@@ -69,96 +68,99 @@ char *ft_strjoin(char *s1, char *s2)
         rs[i] = s1[i];
         i++;
     }
-    while (s2[j])
+    while(s2[j])
     {
         rs[i] = s2[j];
         i++;
         j++;
     }
-    free(s1);
     rs[i] = '\0';
+    free(s1);
     return rs;
 }
 
-char *ft_back(char *save)
+char *ft_back(char *tmp)
 {
-    char *rs;
-    int i = 0;
-    int j = 0;
+    char *back;
+    size_t i = 0;
+    size_t j = 0;
 
-    while (save[i] && save[i] != '\n')
+    if (!tmp)
+        return NULL;
+    while (tmp[i] && tmp[i] != '\n')
         i++;
-    if (!save[i])
+    if (!tmp[i])
     {
-        free(save);
+        free(tmp);
         return NULL;
     }
     i++;
-    rs = malloc(sizeof(char) * (ft_strlen(save) - i + 1));
-    if (!rs)
+    back = malloc(sizeof(char) * (ft_strlen(tmp) - i + 1));
+    if (!back)
     {
-        free(save);
+        free(tmp);
         return NULL;
     }
-    while (save[i])
+    while (tmp[i])
     {
-        rs[j] = save[i];
+        back[j] = tmp[i];
         j++;
         i++;
     }
-    rs[j] = '\0';
-    free(save);
-    return rs;
-    
+    back[j] = '\0';
+    free(tmp);
+    return back;
 }
 
-char *get_new_line(char *tmp)
+char *ft_get_line(char *tmp)
 {
-    char *rs;
-    int i = 0;
-    int j = 0;
+    char *line;
+    size_t i = 0;
+    size_t j = 0;
 
     if (!tmp[0])
         return NULL;
     while (tmp[i] && tmp[i] != '\n')
         i++;
     if (tmp[i] == '\n')
-        rs = malloc(i + 2);
+        line = malloc(i + 2);
     else
-        rs = malloc(i + 1);
-    if (!rs)
-        return NULL;
-    while (tmp[j] && j <= i)
+        line = malloc(i + 1);
+    if (!line)
+        return (NULL);
+    while(tmp[j] && j <= i)
     {
-        rs[j] = tmp[j];
+        line[j] = tmp[j];
         j++;
     }
-    rs[j] = '\0';
-    return rs;
+    line[j] = '\0';
+    return (line);
 }
 
-
-char *read_file(int fd, char *tmp)
+char *ft_read_file(int fd, char *tmp)
 {
-    char *buff = NULL;
-    int rbyte = 1;
+    char *buff;
+    int rbyt = 1;
 
     buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!buff)
         return NULL;
-    while (!ft_strchr(tmp, '\n') && rbyte)
+    while (!ft_strchr(tmp, '\n') && rbyt)
     {
-        rbyte = read(fd, buff, BUFFER_SIZE);
-        if (rbyte == -1)
+        rbyt = read(fd, buff, BUFFER_SIZE);
+        if (rbyt == -1)
         {
             free(buff);
             free(tmp);
             return NULL;
         }
-        buff[rbyte] = '\0';
+        buff[rbyt] = '\0';
         tmp = ft_strjoin(tmp, buff);
-        if (!tmp)
+        if(!tmp)
+        {
+            free(buff);
             return NULL;
+        }
     }
     free(buff);
     return tmp;
@@ -167,17 +169,18 @@ char *read_file(int fd, char *tmp)
 char *ft_get_next_line(int fd)
 {
     char *buff;
-    static char *tmp;
+    char static *tmp;
 
     if (fd < 0 || BUFFER_SIZE <= 0)
         return NULL;
-    tmp = read_file(fd, tmp);
+    tmp = ft_read_file(fd, tmp);
     if (!tmp)
         return NULL;
-    buff = get_new_line(tmp);
+    buff = ft_get_line(tmp);
     tmp = ft_back(tmp);
-    return (buff);
+    return buff;
 }
+
 int main()
 {
     int fd = open("file.txt", O_RDONLY);
