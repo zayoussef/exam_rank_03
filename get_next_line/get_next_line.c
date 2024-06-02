@@ -1,11 +1,16 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yozainan <yozainan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/02 17:02:02 by yozainan          #+#    #+#             */
+/*   Updated: 2024/06/02 17:08:37 by yozainan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 10
-#endif
+#include "get_next_line.h"
 
 size_t ft_strlen(char *s)
 {
@@ -186,3 +191,18 @@ char *get_next_line(int fd)
     return buff;
 }
 
+int main()
+{
+    char *line;
+    size_t i = 1;
+    int fd = open("file.txt", O_RDONLY);
+
+    while ((line = get_next_line(fd)))
+    {
+        printf("[%ld]\t: %s", i, line);
+        i++;
+        free(line);
+    }
+    free(line);
+    close(fd);
+}
