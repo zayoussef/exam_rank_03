@@ -53,7 +53,7 @@ To make your README more visually appealing, you can add some decorations like b
 - [Decoration](#decoration)
 
 ### Screenshots
-![ft_printf Example](https://via.placeholder.com/800x400.png?text=ft_printf+Example)
+![ft_printf Example](https://pbs.twimg.com/media/EbreY1jXYAI5NZu.jpg)
 
 ### License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
