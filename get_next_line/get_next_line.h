@@ -13,13 +13,22 @@
 #ifndef GET_NEXT_LINE_H
 #define GET_NEXT_LINE_H
 
-#include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h> 
+#include <stdio.h> // just using to testing!
+#include <fcntl.h> // just using to testing!
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 910101010
+#define BUFFER_SIZE 32
 #endif
+
+size_t  ft_strlen(char *s);
+char    *ft_strchr(char *s, char c);
+char    *ft_strdup(char *s);
+char    *ft_strjoin(char *s1, char *s2);
+char    *ft_back(char *tmp);
+char    *ft_get_line(char *tmp);
+char    *ft_read_file(int fd, char *tmp);
+char    *get_next_line(int fd);
 
 #endif
